@@ -109,3 +109,36 @@ def geldwaesche_zusatz_offen(akte: dict) -> list:
         offen.extend(_offen(akte, [("verstaerkte_pruefung_dokumentiert",
                                     "verstaerkte Sorgfaltspflichten erfuellt und dokumentiert")]))
     return offen
+
+
+def online_abschluss_offen(akte: dict) -> list:
+    """Vor jedem Maklervertrag mit einem Verbraucher: Wird er per Klick im Internet geschlossen?
+
+    Dann braucht es eine Schaltflaeche, die eindeutig auf die Zahlungspflicht hinweist
+    (Paragraf 312j BGB; BGH 09.10.2025, I ZR 159/24: sonst ist der Vertrag unwirksam),
+    die Widerrufsfunktion nach Paragraf 356a BGB und die Freigabe des Anwalts.
+    """
+    if "vertrag_per_klick" not in akte or akte["vertrag_per_klick"] is None:
+        return [FEHLT + "Vertragsschluss per Klick im Internet ja/nein"]
+    if akte["vertrag_per_klick"] is not True:
+        return []
+    return _offen(akte, [
+        ("schaltflaeche_zahlungspflicht", "Schaltflaeche weist eindeutig auf die Zahlungspflicht hin"),
+        ("widerrufsfunktion_vorhanden", "Widerrufsfunktion auf der Seite vorhanden und in der Belehrung genannt"),
+        ("anwalt_hat_strecke_freigegeben", "Anwalt hat die Online-Strecke freigegeben"),
+    ])
+
+
+def kaeufernutzung_offen(akte: dict) -> list:
+    """Vor dem Maklervertrag mit einem Kaeufer eines Hauses: geplante Nutzung festhalten.
+
+    Fuer die Halbteilung zaehlt, was bei Abschluss des Maklervertrags erkennbar war
+    (BGH 16.07.2026, I ZR 111/25). Im Zweifel die Halbteilung einhalten.
+    """
+    if "kaeufer_ist_verbraucher" not in akte or akte["kaeufer_ist_verbraucher"] is None:
+        return [FEHLT + "Kaeufer ist Verbraucher ja/nein"]
+    if akte["kaeufer_ist_verbraucher"] is not True:
+        return []
+    return _offen(akte, [
+        ("geplante_nutzung_in_textform", "geplante Nutzung des Kaeufers bei Vertragsschluss in Textform festgehalten"),
+    ])
