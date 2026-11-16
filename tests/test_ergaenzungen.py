@@ -61,6 +61,23 @@ class VermietungUndGeldwaesche(unittest.TestCase):
         self.assertEqual(len(e.geldwaesche_zusatz_offen({})), 4)
 
 
+class RechtsCheckNovember2026(unittest.TestCase):
+    def test_online_abschluss(self):
+        self.assertTrue(e.online_abschluss_offen({})[0].startswith(e.FEHLT))
+        self.assertEqual(e.online_abschluss_offen({"vertrag_per_klick": False}), [])
+        self.assertEqual(len(e.online_abschluss_offen({"vertrag_per_klick": True})), 3)
+        akte = {"vertrag_per_klick": True, "schaltflaeche_zahlungspflicht": True,
+                "widerrufsfunktion_vorhanden": True, "anwalt_hat_strecke_freigegeben": False}
+        self.assertEqual(e.online_abschluss_offen(akte), ["Anwalt hat die Online-Strecke freigegeben"])
+
+    def test_kaeufernutzung(self):
+        self.assertTrue(e.kaeufernutzung_offen({})[0].startswith(e.FEHLT))
+        self.assertEqual(e.kaeufernutzung_offen({"kaeufer_ist_verbraucher": False}), [])
+        self.assertEqual(len(e.kaeufernutzung_offen({"kaeufer_ist_verbraucher": True})), 1)
+        self.assertEqual(e.kaeufernutzung_offen({"kaeufer_ist_verbraucher": True,
+                                                 "geplante_nutzung_in_textform": True}), [])
+
+
 class KeineVorgabewerte(unittest.TestCase):
     def test_keine_vorgabewerte(self):
         for name, funktion in inspect.getmembers(e, inspect.isfunction):
