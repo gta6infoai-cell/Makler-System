@@ -15,12 +15,12 @@ Keine Rechts- oder Steuerberatung. Stand: 16.11.2026.
 | --- | --- | --- |
 | pruefungen | provision.py | Provision, Halbteilung, Checkliste Notartermin |
 | pruefungen | pruefpunkte.py | Anzeige, Widerruf, Vermietung, Geldwaesche |
-| pruefungen | ergaenzungen.py | Faelligkeit nach Paragraf 656d BGB, Grundbuch und Rechte am Objekt, Anruf erlaubt ja oder nein, Vermietung, Geldwaesche-Zusatz |
+| pruefungen | ergaenzungen.py | Faelligkeit nach Paragraf 656d BGB, Grundbuch und Rechte am Objekt, Anruf erlaubt ja oder nein, Vermietung, Geldwaesche-Zusatz, Online-Abschluss (Bestellbutton), geplante Nutzung des Kaeufers |
 | bewertung | verfahren.py | Rechenwege nach ImmoWertV: Bodenwert, Sachwert, Ertragswert, Restnutzungsdauer |
 | bewertung | wert.py | aelterer Beispiel-Baustein, wird durch verfahren.py abgeloest |
 | gebiet | entfernung.py | Arbeitsgebiet: 45 km Luftlinie um den Betriebssitz |
 | finanzen | finanzen.py | Ruecklage je Provision, Kostenblatt je Objekt |
-| tests | test_*.py | 51 Tests, darunter die Seminaraufgaben als BEISPIEL-Testfaelle |
+| tests | test_*.py | 53 Tests, darunter die Seminaraufgaben als BEISPIEL-Testfaelle |
 
 ## Tests starten
 Im Hauptordner:
