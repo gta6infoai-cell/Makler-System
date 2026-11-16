@@ -1,6 +1,8 @@
 """BEISPIEL-BAUSTEIN - Ruecklagenrechner und Kostenblatt je Objekt.
 
-ACHTUNG: Alle Prozentsaetze und Betraege sind BEISPIELWERTE.
+ACHTUNG: Alle Konstanten mit BEISPIEL_ im Namen sind erfundene Beispielwerte.
+Sie werden von keiner Funktion automatisch verwendet; echte Werte muessen
+bei jedem Aufruf ausdruecklich angegeben werden.
 Den Ruecklagensatz und die Frage der Umsatzsteuer (Kleinunternehmer ja/nein)
 legt der Steuerberater fest. Keine Steuerberatung.
 """
@@ -9,12 +11,17 @@ from datetime import date
 
 BEISPIEL_UST_SATZ = 0.19        # Beispiel: Regelsteuersatz
 BEISPIEL_RUECKLAGE_SATZ = 0.30  # Beispiel: 30 % vom Netto fuer Einkommensteuer
+BEISPIEL_BUDGET = 5000.0         # Beispiel: Budget je Objekt
+BEISPIEL_FRIST_MONATE = 6        # Beispiel: Frist je Objekt
 
 
-def ruecklage(provision_brutto: float, ust_pflichtig: bool = True,
-              ust_satz: float = BEISPIEL_UST_SATZ,
-              ruecklage_satz: float = BEISPIEL_RUECKLAGE_SATZ) -> dict:
-    """Teilt einen Provisionseingang in Umsatzsteuer, Steuerruecklage und frei verfuegbar."""
+def ruecklage(provision_brutto: float, ust_pflichtig: bool,
+              ust_satz: float, ruecklage_satz: float) -> dict:
+    """Teilt einen Provisionseingang in Umsatzsteuer, Steuerruecklage und frei verfuegbar.
+
+    Alle Saetze muessen ausdruecklich uebergeben werden. Es gibt bewusst keine
+    Vorgabewerte, damit Beispielwerte nie unbemerkt in echte Rechnungen einfliessen.
+    """
     if provision_brutto < 0:
         raise ValueError("Provision darf nicht negativ sein")
     netto = provision_brutto / (1 + ust_satz) if ust_pflichtig else provision_brutto
@@ -35,8 +42,8 @@ class Kostenblatt:
     """Kosten je Objekt mit Budget- und Fristwarnung."""
     objekt: str
     auftragsbeginn: date
-    budget: float = 5000.0      # Beispielwert
-    frist_monate: int = 6       # Beispielwert
+    budget: float               # Pflichtangabe, kein Vorgabewert
+    frist_monate: int           # Pflichtangabe, kein Vorgabewert
     posten: list = field(default_factory=list)
 
     def buchen(self, datum: date, art: str, betrag: float) -> None:
@@ -61,4 +68,4 @@ class Kostenblatt:
 
 if __name__ == "__main__":
     print("BEISPIEL - keine echten Daten")
-    print(ruecklage(17850.00))
+    print(ruecklage(17850.00, True, BEISPIEL_UST_SATZ, BEISPIEL_RUECKLAGE_SATZ))
