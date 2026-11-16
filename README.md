@@ -20,12 +20,14 @@ Keine Rechts- oder Steuerberatung. Stand: 16.11.2026.
 | bewertung | wert.py | aelterer Beispiel-Baustein, wird durch verfahren.py abgeloest |
 | gebiet | entfernung.py | Arbeitsgebiet: 45 km Luftlinie um den Betriebssitz |
 | finanzen | finanzen.py | Ruecklage je Provision, Kostenblatt je Objekt |
-| tests | test_*.py | 53 Tests, darunter die Seminaraufgaben als BEISPIEL-Testfaelle |
+| kontrolle | sperren.py | Stufen eines Verkaufsvorgangs (Auftrag, Anzeige, Besichtigung, Notar, Rechnung); naechste Stufe erst nach Freigabe durch den Inhaber |
+| kontrolle | fristen.py | meldet ueberfaellige und bald faellige Fristen |
+| tests | test_*.py | 62 Tests, darunter die Seminaraufgaben als BEISPIEL-Testfaelle |
 
 ## Tests starten
 Im Hauptordner:
 
-    python -m unittest tests.test_bausteine tests.test_pruefpunkte tests.test_verfahren tests.test_ergaenzungen tests.test_entfernung
+    python -m unittest discover -s tests
 
 Die Tests laufen ausserdem bei jeder Aenderung automatisch (Reiter "Actions").
 
