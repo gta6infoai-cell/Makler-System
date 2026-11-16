@@ -3,7 +3,8 @@ import unittest
 from datetime import date
 
 from bewertung.wert import BEISPIEL_OBJEKT, bodenwert, gebaeudewert, sachwert
-from finanzen.finanzen import Kostenblatt, ruecklage
+from finanzen.finanzen import (BEISPIEL_BUDGET, BEISPIEL_FRIST_MONATE, BEISPIEL_RUECKLAGE_SATZ,
+                               BEISPIEL_UST_SATZ, Kostenblatt, ruecklage)
 from pruefungen.provision import fehlende_voraussetzungen, halbteilung_ok, notartermin_checkliste
 
 
@@ -20,17 +21,23 @@ class Bewertung(unittest.TestCase):
 
 class Finanzen(unittest.TestCase):
     def test_ruecklage(self):
-        r = ruecklage(17850.00)
+        r = ruecklage(17850.00, True, BEISPIEL_UST_SATZ, BEISPIEL_RUECKLAGE_SATZ)
         self.assertEqual(r["netto"], 15000.0)
         self.assertEqual(r["umsatzsteuer"], 2850.0)
         self.assertEqual(r["steuerruecklage"], 4500.0)
         self.assertEqual(r["frei_verfuegbar"], 10500.0)
 
     def test_ruecklage_ohne_ust(self):
-        self.assertEqual(ruecklage(10000, ust_pflichtig=False)["umsatzsteuer"], 0)
+        self.assertEqual(ruecklage(10000, False, BEISPIEL_UST_SATZ, BEISPIEL_RUECKLAGE_SATZ)["umsatzsteuer"], 0)
+
+    def test_keine_vorgabewerte(self):
+        with self.assertRaises(TypeError):
+            ruecklage(17850.00)
+        with self.assertRaises(TypeError):
+            Kostenblatt("Beispielobjekt", date(2026, 1, 15))
 
     def test_kostenblatt_warnungen(self):
-        k = Kostenblatt("Beispielobjekt", date(2026, 1, 15))
+        k = Kostenblatt("Beispielobjekt", date(2026, 1, 15), BEISPIEL_BUDGET, BEISPIEL_FRIST_MONATE)
         k.buchen(date(2026, 2, 1), "Fotograf", 800)
         self.assertEqual(k.warnungen(date(2026, 3, 1)), [])
         k.buchen(date(2026, 6, 1), "Anzeigen", 4500)
